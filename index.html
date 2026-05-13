@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Audience AI — Consultoría AI para Creadores y Negocios</title>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-E77BHZJEQ8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-E77BHZJEQ8');
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -168,6 +176,106 @@ footer a{color:var(--cyan);text-decoration:none;}
 .fi{opacity:0;transform:translateY(28px);transition:opacity 0.7s ease,transform 0.7s ease;}
 .fi.vis{opacity:1;transform:translateY(0);}
 @media(max-width:600px){.score-wrap{padding:32px 20px;}.sonics{padding:24px;}.selfsell{padding:36px 20px;}}
+
+/* QUIZ MODAL */
+.modal-overlay {
+  display:none;position:fixed;inset:0;z-index:1000;
+  background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.open { display:flex; }
+.modal-box {
+  background:linear-gradient(135deg,#0c1428,#111e3a);
+  border:1px solid rgba(0,200,248,0.25);
+  border-radius:24px;padding:40px;
+  max-width:580px;width:100%;
+  position:relative;max-height:90vh;overflow-y:auto;
+}
+.modal-close {
+  position:absolute;top:16px;right:20px;
+  background:transparent;border:none;color:#7a92b0;
+  font-size:24px;cursor:pointer;line-height:1;
+}
+.modal-close:hover { color:#fff; }
+.quiz-progress {
+  display:flex;gap:6px;margin-bottom:28px;
+}
+.quiz-dot {
+  height:4px;flex:1;border-radius:2px;
+  background:rgba(255,255,255,0.1);transition:background 0.3s;
+}
+.quiz-dot.done { background:var(--cyan); }
+.quiz-dot.active { background:rgba(0,200,248,0.5); }
+.quiz-step { display:none; }
+.quiz-step.show { display:block;animation:fadeUp 0.3s ease; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);} }
+.quiz-q-num {
+  font-size:11px;font-weight:700;color:var(--cyan);
+  letter-spacing:0.2em;text-transform:uppercase;margin-bottom:10px;
+}
+.quiz-q-text {
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:20px;font-weight:700;color:#fff;
+  margin-bottom:24px;line-height:1.3;
+}
+.quiz-options { display:flex;flex-direction:column;gap:10px; }
+.quiz-opt {
+  display:flex;align-items:center;gap:14px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:12px;padding:14px 18px;
+  cursor:pointer;transition:all 0.2s;
+  font-size:14px;color:#a8bdd4;font-weight:500;
+  text-align:left;width:100%;font-family:'Plus Jakarta Sans',sans-serif;
+}
+.quiz-opt:hover { background:rgba(0,200,248,0.07);border-color:rgba(0,200,248,0.3);color:#fff; }
+.quiz-opt.sel { background:rgba(0,200,248,0.12);border-color:var(--cyan);color:#fff; }
+.quiz-opt-icon { font-size:20px;flex-shrink:0; }
+.quiz-multi-note {
+  font-size:12px;color:var(--gray);margin-bottom:16px;
+  font-style:italic;
+}
+.quiz-nav {
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:24px;
+}
+.quiz-btn-next {
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--cyan);color:var(--navy);
+  font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:14px;
+  padding:12px 28px;border-radius:10px;border:none;cursor:pointer;
+  transition:all 0.2s;
+}
+.quiz-btn-next:hover { background:#00e5ff;transform:translateY(-1px); }
+.quiz-btn-next:disabled { opacity:0.4;cursor:not-allowed;transform:none; }
+.quiz-btn-back {
+  background:transparent;border:none;color:var(--gray);
+  font-size:13px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;
+  padding:8px;
+}
+.quiz-btn-back:hover { color:#fff; }
+
+/* RESULT SCREENS */
+.result-box { text-align:center;padding:10px 0; }
+.result-icon { font-size:56px;margin-bottom:16px;display:block; }
+.result-title {
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:26px;font-weight:800;margin-bottom:12px;line-height:1.2;
+}
+.result-msg { font-size:15px;color:var(--gray);margin-bottom:28px;line-height:1.7; }
+.result-summary {
+  background:rgba(0,200,248,0.06);
+  border:1px solid rgba(0,200,248,0.15);
+  border-radius:14px;padding:18px;
+  margin-bottom:24px;text-align:left;
+}
+.result-summary-item {
+  display:flex;align-items:flex-start;gap:10px;
+  font-size:13px;color:#a8bdd4;margin-bottom:8px;line-height:1.5;
+}
+.result-summary-item:last-child { margin-bottom:0; }
+.result-check { color:var(--cyan);font-size:14px;flex-shrink:0;margin-top:1px; }
+
 </style>
 </head>
 <body>
@@ -299,7 +407,7 @@ footer a{color:var(--cyan);text-decoration:none;}
             </div>
 
             <div class="score-msg" id="sc-msg">"Tu audiencia tiene potencial real. Con el sistema correcto puedes convertirla en ingresos consistentes."</div>
-            <a href="#contacto" class="btn-main" style="width:100%;justify-content:center;" id="t-scbtn">Quiero aprovechar esto →</a>
+            <a href="#" onclick="openQuiz(event)" class="btn-main" style="width:100%;justify-content:center;" id="t-scbtn">Quiero aprovechar esto →</a>
           </div>
         </div>
       </div>
@@ -386,7 +494,7 @@ footer a{color:var(--cyan);text-decoration:none;}
     <h2 class="s-title" id="t-ctitle">¿Listo para crecer? Hablemos.</h2>
     <p class="s-sub" id="t-csub">Elige cómo prefieres contactarme. No hay preguntas interminables — solo una conversación directa sobre tu negocio.</p>
     <div class="contact-grid">
-      <a href="https://cal.com/digital-closer-nopydv/30min" target="_blank" class="ccard">
+      <a href="#" onclick="openQuiz(event)" class="ccard">
         <div class="ccard-ico ico-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
         <div class="ccard-name" id="c1n">Agenda una llamada</div>
         <div class="ccard-desc" id="c1d">30 minutos para entender tu negocio y ver cómo puedo ayudarte. Sin costo, sin compromiso.</div>
@@ -659,6 +767,304 @@ function showDemo(i){
 const obs=new IntersectionObserver((e)=>{e.forEach(en=>{if(en.isIntersecting) en.target.classList.add('vis');});},{threshold:0.1});
 document.querySelectorAll('.fi').forEach(el=>obs.observe(el));
 calc();
+
+// QUIZ LOGIC
+let answers = {};
+let disqualified = false;
+
+function openQuiz(e) {
+  e.preventDefault();
+  resetQuiz();
+  document.getElementById('quizModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeQuiz() {
+  document.getElementById('quizModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function resetQuiz() {
+  answers = {}; disqualified = false;
+  for(let i=0;i<5;i++){
+    document.getElementById('step'+i).classList.remove('show');
+    document.getElementById('dot'+i).classList.remove('done','active');
+    document.getElementById('next'+i).disabled = true;
+    // clear selections
+    document.querySelectorAll('#step'+i+' .quiz-opt').forEach(o=>o.classList.remove('sel'));
+  }
+  ['step-yes','step-no'].forEach(id=>document.getElementById(id).classList.remove('show'));
+  document.getElementById('step0').classList.add('show');
+  document.getElementById('dot0').classList.add('active');
+}
+
+function selectOpt(step, idx, qualification) {
+  const stepEl = document.getElementById('step'+step);
+  stepEl.querySelectorAll('.quiz-opt').forEach(o=>o.classList.remove('sel'));
+  stepEl.querySelectorAll('.quiz-opt')[idx].classList.add('sel');
+  answers['q'+step] = { idx, qualification };
+  document.getElementById('next'+step).disabled = false;
+}
+
+function toggleMulti(btn) {
+  btn.classList.toggle('sel');
+  const anySelected = document.querySelectorAll('#step4 .quiz-opt.sel').length > 0;
+  document.getElementById('next4').disabled = !anySelected;
+  // collect selected services
+  const selected = [];
+  document.querySelectorAll('#step4 .quiz-opt.sel').forEach(o=>selected.push(o.dataset.val));
+  answers['q4'] = selected;
+}
+
+function nextStep(current) {
+  // check if disqualified
+  const ans = answers['q'+current];
+  if(ans && ans.qualification === 'disqualify') {
+    disqualified = true;
+  }
+  document.getElementById('step'+current).classList.remove('show');
+  document.getElementById('dot'+current).classList.remove('active');
+  document.getElementById('dot'+current).classList.add('done');
+  const next = current + 1;
+  if(next < 5) {
+    document.getElementById('step'+next).classList.add('show');
+    document.getElementById('dot'+next).classList.add('active');
+  }
+}
+
+function prevStep(current) {
+  document.getElementById('step'+current).classList.remove('show');
+  document.getElementById('dot'+current).classList.remove('active');
+  const prev = current - 1;
+  document.getElementById('step'+prev).classList.add('show');
+  document.getElementById('dot'+prev).classList.remove('done');
+  document.getElementById('dot'+prev).classList.add('active');
+  disqualified = false;
+  // recheck disqualification from remaining answers
+  for(let i=0;i<prev;i++){
+    if(answers['q'+i] && answers['q'+i].qualification === 'disqualify') disqualified = true;
+  }
+}
+
+function showResult() {
+  // check step4 (multi)
+  document.getElementById('step4').classList.remove('show');
+  document.getElementById('dot4').classList.remove('active');
+  document.getElementById('dot4').classList.add('done');
+
+  // check all disqualifications
+  for(let i=0;i<4;i++){
+    if(answers['q'+i] && answers['q'+i].qualification === 'disqualify') disqualified = true;
+  }
+
+  if(disqualified) {
+    document.getElementById('step-no').classList.add('show');
+  } else {
+    // Build summary
+    const stepTexts = [
+      ['Menos de 10K','10K – 30K','30K – 100K','Más de 100K'],
+      ['Sin proceso definido','Ventas inconsistentes','Quiero escalar','Ventas estancadas'],
+      ['Urgencia crítica','Actuar en 30 días','Solo explorando'],
+      ['Listo para invertir','Depende del costo','Solo investigando']
+    ];
+    const serviceMap = {
+      web:'Página web / Landing page', funnel:'Funnel de ventas',
+      dm:'Automatización de DMs', chatbot:'Chatbot AI',
+      analytics:'Análisis de redes', crm:'App / CRM personalizado',
+      voice:'Agente de voz AI', help:'Orientación general'
+    };
+    let summaryHTML = '';
+    for(let i=0;i<4;i++){
+      if(answers['q'+i]){
+        summaryHTML += `<div class="result-summary-item"><span class="result-check">✓</span><span>${stepTexts[i][answers['q'+i].idx]}</span></div>`;
+      }
+    }
+    if(answers['q4'] && answers['q4'].length){
+      const svcs = answers['q4'].map(v=>serviceMap[v]).join(', ');
+      summaryHTML += `<div class="result-summary-item"><span class="result-check">✓</span><span>Servicios: ${svcs}</span></div>`;
+    }
+    document.getElementById('res-summary').innerHTML = summaryHTML;
+    document.getElementById('step-yes').classList.add('show');
+  }
+}
+
+// Close on overlay click
+document.getElementById('quizModal').addEventListener('click', function(e){
+  if(e.target === this) closeQuiz();
+});
+
 </script>
+
+<!-- QUIZ MODAL -->
+<div class="modal-overlay" id="quizModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeQuiz()">✕</button>
+
+    <!-- Progress dots -->
+    <div class="quiz-progress">
+      <div class="quiz-dot active" id="dot0"></div>
+      <div class="quiz-dot" id="dot1"></div>
+      <div class="quiz-dot" id="dot2"></div>
+      <div class="quiz-dot" id="dot3"></div>
+      <div class="quiz-dot" id="dot4"></div>
+    </div>
+
+    <!-- STEP 1 — Seguidores -->
+    <div class="quiz-step show" id="step0">
+      <div class="quiz-q-num" id="qn0">Pregunta 1 de 5</div>
+      <div class="quiz-q-text" id="qq0">¿Cuántos seguidores tienes en total sumando todas tus redes?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="selectOpt(0,0,'disqualify')" id="s0o0">
+          <span class="quiz-opt-icon">📱</span> Menos de 10K
+        </button>
+        <button class="quiz-opt" onclick="selectOpt(0,1,'qualify')" id="s0o1">
+          <span class="quiz-opt-icon">📈</span> 10K – 30K
+        </button>
+        <button class="quiz-opt" onclick="selectOpt(0,2,'qualify')" id="s0o2">
+          <span class="quiz-opt-icon">🚀</span> 30K – 100K
+        </button>
+        <button class="quiz-opt" onclick="selectOpt(0,3,'qualify')" id="s0o3">
+          <span class="quiz-opt-icon">⭐</span> Más de 100K
+        </button>
+      </div>
+      <div class="quiz-nav">
+        <span></span>
+        <button class="quiz-btn-next" onclick="nextStep(0)" id="next0" disabled id="qbtn0">Siguiente →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2 — Ventas -->
+    <div class="quiz-step" id="step1">
+      <div class="quiz-q-num" id="qn1">Pregunta 2 de 5</div>
+      <div class="quiz-q-text" id="qq1">¿Cómo describirías tus ventas actualmente?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="selectOpt(1,0,'qualify')" id="s1o0">
+          <span class="quiz-opt-icon">😔</span> No tengo un proceso de ventas definido
+        </button>
+        <button class="quiz-opt" onclick="selectOpt(1,1,'qualify')" id="s1o1">
+          <span class="quiz-opt-icon">📉</span> Vendo pero de forma inconsistente
+        </button>
+        <button class="quiz-opt" onclick="selectOpt(1,2,'qualify')" id="s1o2">
+          <span class="quiz-opt-icon">📊</span> Tengo ventas pero quiero escalar
+        </button>
+        <button class="quiz-opt" onclick="selectOpt(1,3,'qualify')" id="s1o3">
+          <span class="quiz-opt-icon">⏸️</span> Mis ventas están estancadas hace meses
+        </button>
+      </div>
+      <div class="quiz-nav">
+        <button class="quiz-btn-back" onclick="prevStep(1)">← Anterior</button>
+        <button class="quiz-btn-next" onclick="nextStep(1)" id="next1" disabled>Siguiente →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 — Urgencia -->
+    <div class="quiz-step" id="step2">
+      <div class="quiz-q-num" id="qn2">Pregunta 3 de 5</div>
+      <div class="quiz-q-text" id="qq2">¿Qué tan urgente es para ti mejorar tus resultados?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="selectOpt(2,0,'qualify')" id="s2o0">
+          <span class="quiz-opt-icon">🔥</span> Crítico — necesito soluciones ya
+        </button>
+        <button class="quiz-opt" onclick="selectOpt(2,1,'qualify')" id="s2o1">
+          <span class="quiz-opt-icon">📅</span> Importante — quiero actuar en los próximos 30 días
+        </button>
+        <button class="quiz-opt" onclick="selectOpt(2,2,'disqualify')" id="s2o2">
+          <span class="quiz-opt-icon">🔍</span> Solo estoy explorando opciones por ahora
+        </button>
+      </div>
+      <div class="quiz-nav">
+        <button class="quiz-btn-back" onclick="prevStep(2)">← Anterior</button>
+        <button class="quiz-btn-next" onclick="nextStep(2)" id="next2" disabled>Siguiente →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4 — Inversión -->
+    <div class="quiz-step" id="step3">
+      <div class="quiz-q-num" id="qn3">Pregunta 4 de 5</div>
+      <div class="quiz-q-text" id="qq3">Si encontraras la solución correcta, ¿estás en posición de invertir en ella?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="selectOpt(3,0,'qualify')" id="s3o0">
+          <span class="quiz-opt-icon">💪</span> Sí — si veo el valor estoy listo para actuar
+        </button>
+        <button class="quiz-opt" onclick="selectOpt(3,1,'qualify')" id="s3o1">
+          <span class="quiz-opt-icon">🤔</span> Depende del costo, necesito más información
+        </button>
+        <button class="quiz-opt" onclick="selectOpt(3,2,'disqualify')" id="s3o2">
+          <span class="quiz-opt-icon">👀</span> Por ahora solo estoy investigando opciones
+        </button>
+      </div>
+      <div class="quiz-nav">
+        <button class="quiz-btn-back" onclick="prevStep(3)">← Anterior</button>
+        <button class="quiz-btn-next" onclick="nextStep(3)" id="next3" disabled>Siguiente →</button>
+      </div>
+    </div>
+
+    <!-- STEP 5 — Servicios (multi-select) -->
+    <div class="quiz-step" id="step4">
+      <div class="quiz-q-num" id="qn4">Pregunta 5 de 5</div>
+      <div class="quiz-q-text" id="qq4">¿Qué servicio estás buscando para tu negocio?</div>
+      <p class="quiz-multi-note" id="qnote4">Puedes seleccionar más de una opción</p>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="toggleMulti(this)" data-val="web">
+          <span class="quiz-opt-icon">🌐</span> Página web o landing page profesional
+        </button>
+        <button class="quiz-opt" onclick="toggleMulti(this)" data-val="funnel">
+          <span class="quiz-opt-icon">🎯</span> Funnel de ventas con captura de leads
+        </button>
+        <button class="quiz-opt" onclick="toggleMulti(this)" data-val="dm">
+          <span class="quiz-opt-icon">📱</span> Automatización de DMs en redes sociales
+        </button>
+        <button class="quiz-opt" onclick="toggleMulti(this)" data-val="chatbot">
+          <span class="quiz-opt-icon">🤖</span> Chatbot AI para WhatsApp o Instagram
+        </button>
+        <button class="quiz-opt" onclick="toggleMulti(this)" data-val="analytics">
+          <span class="quiz-opt-icon">📊</span> Análisis de mis redes sociales con AI
+        </button>
+        <button class="quiz-opt" onclick="toggleMulti(this)" data-val="crm">
+          <span class="quiz-opt-icon">⚙️</span> App o CRM personalizado para mi negocio
+        </button>
+        <button class="quiz-opt" onclick="toggleMulti(this)" data-val="voice">
+          <span class="quiz-opt-icon">📞</span> Agente de voz AI para llamadas
+        </button>
+        <button class="quiz-opt" onclick="toggleMulti(this)" data-val="help">
+          <span class="quiz-opt-icon">💡</span> No sé exactamente — necesito orientación
+        </button>
+      </div>
+      <div class="quiz-nav">
+        <button class="quiz-btn-back" onclick="prevStep(4)">← Anterior</button>
+        <button class="quiz-btn-next" onclick="showResult()" id="next4" disabled>Ver resultado →</button>
+      </div>
+    </div>
+
+    <!-- RESULT: CALIFICA -->
+    <div class="quiz-step" id="step-yes">
+      <div class="result-box">
+        <span class="result-icon">🎯</span>
+        <div class="result-title" id="res-yes-title">¡Perfecto! Tienes exactamente lo que necesitamos para trabajar juntos.</div>
+        <p class="result-msg" id="res-yes-msg">Basado en tus respuestas veo oportunidades claras para hacer crecer tu negocio con AI. Agenda tu sesión estratégica gratuita de 30 minutos — sin costo, sin compromiso.</p>
+        <div class="result-summary" id="res-summary"></div>
+        <a href="https://cal.com/digital-closer-nopydv/30min" target="_blank" class="btn-main" style="width:100%;justify-content:center;margin-bottom:12px;" id="res-cta">
+          📅 <span id="res-cta-text">Agendar sesión gratuita →</span>
+        </a>
+        <p style="font-size:12px;color:var(--gray);text-align:center;" id="res-note">30 minutos · Sin costo · Sin compromiso</p>
+      </div>
+    </div>
+
+    <!-- RESULT: NO CALIFICA -->
+    <div class="quiz-step" id="step-no">
+      <div class="result-box">
+        <span class="result-icon">💬</span>
+        <div class="result-title" id="res-no-title">Gracias por tu tiempo — tenemos algo para ti.</div>
+        <p class="result-msg" id="res-no-msg">En este momento no tenemos el programa ideal para tu etapa, pero eso no significa que no podamos ayudarte. Escríbenos por DM y con gusto te orientamos hacia los mejores primeros pasos para hacer crecer tu negocio.</p>
+        <a href="https://www.facebook.com/DigitalCloserJroldan" target="_blank" class="btn-main" style="width:100%;justify-content:center;margin-bottom:12px;" id="res-dm-cta">
+          📱 <span id="res-dm-text">Escribir por DM →</span>
+        </a>
+        <p style="font-size:12px;color:var(--gray);text-align:center;" id="res-dm-note">Te respondemos en menos de 24 horas</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 </body>
 </html>
