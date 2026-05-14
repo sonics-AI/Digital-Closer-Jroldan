@@ -703,6 +703,7 @@ function setLang(l){
     }
   });
   calc();
+  updateQuizLang();
 }
 
 function selToggle(btn,group){
@@ -767,6 +768,129 @@ function showDemo(i){
 const obs=new IntersectionObserver((e)=>{e.forEach(en=>{if(en.isIntersecting) en.target.classList.add('vis');});},{threshold:0.1});
 document.querySelectorAll('.fi').forEach(el=>obs.observe(el));
 calc();
+
+// QUIZ TRANSLATIONS
+const QT = {
+  es: {
+    q0num: 'Pregunta 1 de 5',
+    q0text: '¿Cuántos seguidores tienes en total sumando todas tus redes?',
+    q0o0: 'Menos de 10K', q0o1: '10K – 30K', q0o2: '30K – 100K', q0o3: 'Más de 100K',
+    q1num: 'Pregunta 2 de 5',
+    q1text: '¿Cómo describirías tus ventas actualmente?',
+    q1o0: 'No tengo un proceso de ventas definido', q1o1: 'Vendo pero de forma inconsistente',
+    q1o2: 'Tengo ventas pero quiero escalar', q1o3: 'Mis ventas están estancadas hace meses',
+    q2num: 'Pregunta 3 de 5',
+    q2text: '¿Qué tan urgente es para ti mejorar tus resultados?',
+    q2o0: 'Crítico — necesito soluciones ya', q2o1: 'Importante — quiero actuar en los próximos 30 días',
+    q2o2: 'Solo estoy explorando opciones por ahora',
+    q3num: 'Pregunta 4 de 5',
+    q3text: '¿Si encontraras la solución correcta, estás en posición de invertir en ella?',
+    q3o0: 'Sí — si veo el valor estoy listo para actuar', q3o1: 'Depende del costo, necesito más información',
+    q3o2: 'Por ahora solo estoy investigando opciones',
+    q4num: 'Pregunta 5 de 5',
+    q4text: '¿Qué servicio estás buscando para tu negocio?',
+    q4note: 'Puedes seleccionar más de una opción',
+    q4o0: '🌐 Página web o landing page profesional', q4o1: '🎯 Funnel de ventas con captura de leads',
+    q4o2: '📱 Automatización de DMs en redes sociales', q4o3: '🤖 Chatbot AI para WhatsApp o Instagram',
+    q4o4: '📊 Análisis de mis redes sociales con AI', q4o5: '⚙️ App o CRM personalizado para mi negocio',
+    q4o6: '📞 Agente de voz AI para llamadas', q4o7: '💡 No sé exactamente — necesito orientación',
+    next: 'Siguiente →', back: '← Anterior', viewResult: 'Ver resultado →',
+    yesTitle: '¡Perfecto! Tienes exactamente lo que necesitamos para trabajar juntos.',
+    yesMsg: 'Basado en tus respuestas veo oportunidades claras para hacer crecer tu negocio con AI. Agenda tu sesión estratégica gratuita de 30 minutos — sin costo, sin compromiso.',
+    yesCta: 'Agendar sesión gratuita →', yesNote: '30 minutos · Sin costo · Sin compromiso',
+    noTitle: 'Gracias por tu tiempo — tenemos algo para ti.',
+    noMsg: 'En este momento no tenemos el programa ideal para tu etapa, pero eso no significa que no podamos ayudarte. Escríbenos por DM y con gusto te orientamos hacia los mejores primeros pasos.',
+    noCta: 'Escribir por DM →', noNote: 'Te respondemos en menos de 24 horas',
+    refServices: 'Servicios: ', multiNote: 'Puedes seleccionar más de una opción'
+  },
+  en: {
+    q0num: 'Question 1 of 5',
+    q0text: 'How many followers do you have in total across all your networks?',
+    q0o0: 'Less than 10K', q0o1: '10K – 30K', q0o2: '30K – 100K', q0o3: 'More than 100K',
+    q1num: 'Question 2 of 5',
+    q1text: 'How would you describe your sales right now?',
+    q1o0: 'I have no defined sales process', q1o1: 'I sell but inconsistently',
+    q1o2: 'I have sales but want to scale', q1o3: 'My sales have been stagnant for months',
+    q2num: 'Question 3 of 5',
+    q2text: 'How urgent is it for you to improve your results?',
+    q2o0: 'Critical — I need solutions now', q2o1: 'Important — I want to act in the next 30 days',
+    q2o2: 'I am just exploring options for now',
+    q3num: 'Question 4 of 5',
+    q3text: 'If you found the right solution, are you in a position to invest in it?',
+    q3o0: 'Yes — if I see the value I am ready to act', q3o1: 'Depends on cost, I need more info',
+    q3o2: 'For now I am just researching options',
+    q4num: 'Question 5 of 5',
+    q4text: 'What service are you looking for in your business?',
+    q4note: 'You can select more than one option',
+    q4o0: '🌐 Professional website or landing page', q4o1: '🎯 Sales funnel with lead capture',
+    q4o2: '📱 Social media DM automation', q4o3: '🤖 AI chatbot for WhatsApp or Instagram',
+    q4o4: '📊 Social media analytics with AI', q4o5: '⚙️ Custom app or CRM for my business',
+    q4o6: '📞 AI voice agent for calls', q4o7: '💡 Not sure exactly — I need guidance',
+    next: 'Next →', back: '← Back', viewResult: 'See result →',
+    yesTitle: 'Perfect! You have exactly what we need to work together.',
+    yesMsg: 'Based on your answers I see clear opportunities to grow your business with AI. Schedule your free 30-minute strategy session — no cost, no commitment.',
+    yesCta: 'Schedule free session →', yesNote: '30 minutes · No cost · No commitment',
+    noTitle: 'Thank you for your time — we have something for you.',
+    noMsg: 'At the moment we do not have the ideal program for your stage, but that does not mean we cannot help you. Write us a DM and we will be happy to guide you toward the best first steps.',
+    noCta: 'Write a DM →', noNote: 'We respond within 24 hours',
+    refServices: 'Services: ', multiNote: 'You can select more than one option'
+  }
+};
+
+function updateQuizLang() {
+  const q = QT[lang];
+  // Step labels and questions
+  for(let i=0;i<5;i++){
+    const numEl = document.getElementById('qn'+i);
+    const txtEl = document.getElementById('qq'+i);
+    if(numEl) numEl.textContent = q['q'+i+'num'];
+    if(txtEl) txtEl.textContent = q['q'+i+'text'];
+  }
+  // Options for steps 0-3 (single select)
+  for(let i=0;i<4;i++){
+    for(let j=0;j<4;j++){
+      const el = document.getElementById('s'+i+'o'+j);
+      if(el && q['q'+i+'o'+j]) {
+        // preserve icon span, update text
+        const icon = el.querySelector('.quiz-opt-icon');
+        const iconText = icon ? icon.outerHTML : '';
+        el.innerHTML = iconText + ' ' + q['q'+i+'o'+j];
+      }
+    }
+  }
+  // Options for step 4 (multi select) - rebuild text only
+  const step4opts = document.querySelectorAll('#step4 .quiz-opt');
+  const s4keys = ['q4o0','q4o1','q4o2','q4o3','q4o4','q4o5','q4o6','q4o7'];
+  step4opts.forEach((opt, i) => {
+    if(q[s4keys[i]]) opt.textContent = q[s4keys[i]];
+  });
+  // Multi note
+  const noteEl = document.getElementById('qnote4');
+  if(noteEl) noteEl.textContent = q.q4note;
+  // Nav buttons
+  document.querySelectorAll('.quiz-btn-next').forEach(btn => {
+    if(btn.id !== 'next4') btn.textContent = q.next;
+  });
+  const next4 = document.getElementById('next4');
+  if(next4) next4.textContent = q.viewResult;
+  document.querySelectorAll('.quiz-btn-back').forEach(btn => btn.textContent = q.back);
+  // Result screens
+  const yesTitle = document.getElementById('res-yes-title');
+  const yesMsg = document.querySelector('#step-yes .result-msg');
+  const yesCta = document.getElementById('res-cta-text');
+  const yesNote = document.querySelector('#step-yes .result-note');
+  if(yesTitle) yesTitle.textContent = q.yesTitle;
+  if(yesMsg) yesMsg.textContent = q.yesMsg;
+  if(yesCta) yesCta.textContent = q.yesCta;
+  const noTitle = document.getElementById('res-no-title');
+  const noMsg = document.querySelector('#step-no .result-msg');
+  const noDmText = document.getElementById('res-dm-text');
+  const noDmNote = document.getElementById('res-dm-note');
+  if(noTitle) noTitle.textContent = q.noTitle;
+  if(noMsg) noMsg.textContent = q.noMsg;
+  if(noDmText) noDmText.textContent = q.noCta;
+  if(noDmNote) noDmNote.textContent = q.noNote;
+}
 
 // QUIZ LOGIC
 let answers = {};
