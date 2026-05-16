@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -285,8 +285,8 @@ footer a{color:var(--cyan);text-decoration:none;}
 <nav>
   <a href="https://sonics-ai.com" class="nav-logo"><div class="logo-dot"></div>Audience <span>AI</span></a>
   <div class="lang-sw">
-    <button class="lb on" onclick="setLang('es')" id="bes">ES</button>
-    <button class="lb" onclick="setLang('en')" id="ben">EN</button>
+    <button class="lb" onclick="setLang('es')" id="bes">ES</button>
+    <button class="lb on" onclick="setLang('en')" id="ben">EN</button>
   </div>
 </nav>
 
@@ -654,7 +654,7 @@ const T={
   }
 };
 
-let lang='es';
+let lang='en';
 let state={followers:25,msgs:20,prod:2,sys:1};
 
 function setLang(l){
@@ -765,8 +765,11 @@ function showDemo(i){
   document.getElementById('dt'+i).classList.add('active');
 }
 
-const obs=new IntersectionObserver((e)=>{e.forEach(en=>{if(en.isIntersecting) en.target.classList.add('vis');});},{threshold:0.1});
-document.querySelectorAll('.fi').forEach(el=>obs.observe(el));
+document.addEventListener('DOMContentLoaded', function() {
+  setLang('en');
+  const obs=new IntersectionObserver((e)=>{e.forEach(en=>{if(en.isIntersecting) en.target.classList.add('vis');});},{threshold:0.1});
+  document.querySelectorAll('.fi').forEach(el=>obs.observe(el));
+});
 calc();
 
 // QUIZ TRANSLATIONS
